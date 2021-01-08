@@ -26,7 +26,7 @@ tel;
 
 --------------------------------------------------------------------------
 -- ADDITIONNEUR N BITS
--- a et b deux opŽrandes, re : retenue entrante, rs: retenue sortante
+-- a et b deux opï¿½randes, re : retenue entrante, rs: retenue sortante
 --------------------------------------------------------------------------
 function add_n_bits << const n : int>> ( a , b : bool^n ; re : bool )
 returns ( r : bool^n; rs:bool );
@@ -45,11 +45,11 @@ tel;
 --uc1 uc0 operation
 -- 0  0   op1-op2
 -- 0  1   op1*op2 sur n bits (n bits de poids fort tronques)
--- 1  0   op1 decale d'un cran ˆ droite
+-- 1  0   op1 decale d'un cran ï¿½ droite
 -- 1  1   op1 - 0
 -- emprunt est l'emprunt de la soustraction (inverse de la retenue sortante de l'addition)
--- emprunt n'a pas de sens en cas de dŽcalage et multiplication
--- Z est ˆ 1 si le resultat T est nul
+-- emprunt n'a pas de sens en cas de dï¿½calage et multiplication
+-- Z est ï¿½ 1 si le resultat T est nul
 -- T est le resultat sur n bits de l'UAL
 
 function ual_n_bits << const n : int >> ( A , B : bool^n ; uc1 , uc0 : bool )
@@ -60,7 +60,7 @@ returns ( emprunt, Z : bool ; T : bool^n );
 
 let
 	-- soustraction a l'aide de l'additionneur n bits
--- si uc1=uc2=1 alors le deuxieme opŽrande est Žgal ˆ 0:
+-- si uc1=uc2=1 alors le deuxieme opï¿½rande est ï¿½gal ï¿½ 0:
 op2= map<<not;n>> (map<<and;n>>(B, (map <<not;n>> (map <<and;n>> (uc1^n, uc0^n)))));
 	(R, C) = add_n_bits << n>>(A , op2, true );
 	-- l'emprunt de la soustraction est le complement de la retenue de l'addition
@@ -75,7 +75,7 @@ op2= map<<not;n>> (map<<and;n>>(B, (map <<not;n>> (map <<and;n>> (uc1^n, uc0^n))
 	
 	--choix resultat de mult (decale de n bits) ou decalage d'un bit et soustraction
 T=map <<mux4;n>>( uc1^n , uc0^n, R, M[0..n-1], decal, R);
-    -- Z vaut 1 si aucun des bits du resultat est ˆ 1
+    -- Z vaut 1 si aucun des bits du resultat est ï¿½ 1
     Z= not orn<<n>>(T);
 tel;
 

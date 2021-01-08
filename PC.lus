@@ -1,0 +1,58 @@
+include "registre.lus"
+include "UALCryptoV6.lus"
+include "mux.lus"
+include "PO.lus"
+
+node PC8 = PC<<8>>;
+
+node PC<<const n: int>>(start, reset, C, Z, P: bool)
+returns (done, chCode, chM, chExp, chMod, op1_1, op1_0, op2, load, uc1, uc0, ENTER_M, ENTER_EXP, ENTER_N: bool;);
+var EI0, EI1, EI2, EI3, EI4, EW0, EM1, EC1, EW1, ES0, EM2, EC2, EW2, EE: bool;
+var _EI0, _EI1, _EI2, _EI3, _EI4, _EW0, _EC1, _EM1, _EW1, _ES0, _EM2, _EC2, _EW2, _EE: bool;
+let
+    EI0 = basculePC(_EI0, true, false, reset);
+    EI1 = basculePC(_EI1, true, reset, false);
+    EI2 = basculePC(_EI2, true, reset, false);
+    EI3 = basculePC(_EI3, true, reset, false);
+    EI4 = basculePC(_EI4, true, reset, false);
+    EW0 = basculePC(_EW0, true, reset, false);
+    EM1 = basculePC(_EM1, true, reset, false);
+    EC1 = basculePC(_EC1, true, reset, false);
+    EW1 = basculePC(_EW1, true, reset, false);
+    ES0 = basculePC(_ES0, true, reset, false);
+    EM2 = basculePC(_EM2, true, reset, false);
+    EC2 = basculePC(_EC2, true, reset, false);
+    EW2 = basculePC(_EW2, true, reset, false);
+    EE = basculePC(_EE, true, reset, false);
+
+    _EI0 = start;
+    _EI1 = EI0 and not start;
+    _EI2 = EI1;
+    _EI3 = EI2;
+    _EI4 = EI3;
+    _EW0 = EI4 or EC2 and (Z or C);
+    _EM1 = EW0 and not Z and P;
+    _EC1 = EM1 or EW1;
+    _EW1 = EC1 and not (Z or C);
+    _ES0 = EW0 and not Z and not P or EC1 and (Z or C);
+    _EM2 = ES0;
+    _EC2 = EM2 or EW2;
+    _EW2 = EC2 and not (Z or C);
+    _EE = EW0 and Z;
+
+    done = EE;
+    chM = EI1 or EM2 or EW2;
+    chExp = EI2 or ES0;
+    chMod = EI3;
+    chCode = EI4 or EM1 or EW1;
+    op1_1 = EW0 or ES0 or EI4;
+    op1_0 = EM2 or EI4 or EC2 or EW2;
+    op2 = EM1 or EM2;
+    uc1 = EW0 or ES0 or EI4;
+    uc0 = EW0 or EM1 or EM2 or EI4;
+    load = EI1 or EI2 or EI3;
+
+    ENTER_M = EI0;
+    ENTER_EXP = EI1;
+    ENTER_N = EI2;
+tel;

@@ -1,0 +1,28 @@
+include "registre.lus"
+include "UALCryptoV6.lus"
+include "mux.lus"
+
+node PO16 = PO<<16>>;
+
+node PO<<const n: int>>(BUS_IN: bool^n; chCode, chM, chExp, chMod, op1_1, op1_0, op2, load, uc1, uc0: bool)
+returns (BUS_OUT: bool^n; C, Z, P: bool);
+var BUS_OP1, BUS_OP2, BUS_UAL, BUS_RES: bool^n;
+var CODE_OUT, M_OUT, EXP_OUT, MOD_OUT, ONE: bool^n;
+let
+    CODE_OUT = registre<<n>>(BUS_RES, chCode);
+    M_OUT = registre<<n>>(BUS_RES, chM);
+    EXP_OUT = registre<<n>>(BUS_RES, chExp);
+    MOD_OUT = registre<<n>>(BUS_RES, chMod);
+    BUS_OUT = CODE_OUT;
+    P = EXP_OUT[0];
+    
+    ONE[0] = true;
+    ONE[1..(n-1)] = false^(n-1);
+
+    BUS_OP1 = muxn2<<n>>(op1_1, op1_0, CODE_OUT, M_OUT, EXP_OUT, ONE);
+    BUS_OP2 = muxn1<<n>>(op2, MOD_OUT, M_OUT);
+    
+    C, Z, BUS_UAL = ual_n_bits<<n>>(BUS_OP1, BUS_OP2, uc1, uc0);
+    BUS_RES = muxn1<<n>>(load, BUS_UAL, BUS_IN);
+
+tel;

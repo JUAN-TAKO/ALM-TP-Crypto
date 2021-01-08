@@ -1,0 +1,15 @@
+include "registre.lus"
+include "PO.lus"
+include "PC_debug.lus"
+include "mux.lus"
+
+node Crypto8 = crypto<<16>>;
+
+node crypto<<const n: int>>(start, reset: bool; BUS_IN: bool^n;)
+returns (done, ENTER_M, ENTER_EXP, ENTER_N, C, Z, P, chCode, chM, chExp, chMod, op1_1, op1_0, op2, load, uc1, uc0,
+         _EI0, EI0, _EI1, EI1, _EI2, EI2, _EI3, EI3, _EI4, EI4, _EW0, EW0, _ET0, ET0, _EM0, EM0, _EC1, EC1, _EW1, EW1, _ES0, ES0, _EM2, EM2, _EC2, EC2, _EW2, EW2, _EE, EE: bool; BUS_RES, BUS_UAL, M_OUT, EXP_OUT, MOD_OUT, BUS_OUT: bool^n;);
+let
+    (done, chCode, chM, chExp, chMod, op1_1, op1_0, op2, load, uc1, uc0, ENTER_M, ENTER_EXP, ENTER_N,_EI0, EI0, _EI1, EI1, _EI2, EI2, _EI3, EI3, _EI4, EI4, _EW0, EW0, _ET0, ET0, _EM0, EM0, _EC1, EC1, _EW1, EW1, _ES0, ES0, _EM2, EM2, _EC2, EC2, _EW2, EW2, _EE, EE) = PC<<n>>(start, reset, C, Z, P);
+    (BUS_RES, BUS_UAL, M_OUT, EXP_OUT, MOD_OUT, BUS_OUT, C, Z, P) = PO<<n>>(BUS_IN, chCode, chM, chExp, chMod, op1_1, op1_0, op2, load, uc1, uc0);
+
+tel;

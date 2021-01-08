@@ -1,0 +1,22 @@
+function mux1(c, t, i: bool) returns (o: bool);
+let
+    o = not c and t or c and i;
+tel;
+
+function muxn1<<const n: int>>(c: bool; i1, i0: bool^n) returns (o: bool^n);
+let
+    o = map<<mux1, n>>(c^n,i1,i0);
+tel;
+
+function mux2(c1, c0, i0, i1, i2, i3: bool) returns (o: bool);
+let
+    o = not c1 and not c0 and i0
+     or not c1 and     c0 and i1
+     or     c1 and not c0 and i2
+     or     c1 and     c0 and i3;
+tel;
+
+function muxn2<<const n: int>>(c1, c0: bool; i0, i1, i2, i3: bool^n) returns (o: bool^n);
+let
+    o =  map<<mux2, n>>(c1^n, c0^n, i0, i1, i2, i3);
+tel;

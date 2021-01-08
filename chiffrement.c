@@ -28,6 +28,11 @@ l_int chiffrementUAL(l_int m, l_int exp, l_int n){
 	l_int code=1;
 	while (exp > 0)
 	{
+		printf("code: %ld\n", code);
+		printf("m: %ld\n", m);
+		printf("exp: %ld\n", exp);
+		printf("mod: %ld\n", n);
+
 		if ((exp&1)>0)
 		{
 			code = (code * m);
@@ -39,7 +44,12 @@ l_int chiffrementUAL(l_int m, l_int exp, l_int n){
 		m= (m*m);
 		while(m-n > 0)
 			m = m-n;
+		
 	}
+	printf("code: %ld\n", code);
+	printf("m: %ld\n", m);
+	printf("exp: %ld\n", exp);
+	printf("mod: %ld\n", n);
 	return code;
 }
 int main(int argc, char * argv[])

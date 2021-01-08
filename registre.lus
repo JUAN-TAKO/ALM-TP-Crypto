@@ -1,0 +1,21 @@
+include "mux.lus"
+
+node bascule(in, ch: bool) returns (out: bool);
+var D: bool;
+let
+    D = mux1(ch, out, in);
+    out = false -> pre D;
+tel;
+
+node basculePC(ent,char,reset,set : bool)
+returns(sort:bool)
+var D:bool;
+let
+D=set or(not reset and mux1(char,sort,ent));
+sort = true -> pre D;
+tel;
+
+node registre<<const n: int>>(in: bool^n; ch: bool) returns (out: bool^n);
+let
+    out = map<<bascule, n>>(in, ch^n);
+tel;

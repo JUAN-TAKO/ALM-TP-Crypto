@@ -1,0 +1,16 @@
+include "registre.lus"
+include "PO.lus"
+include "PC.lus"
+include "mux.lus"
+
+node Crypto8 = crypto<<16>>;
+
+node crypto<<const n: int>>(start, reset: bool; BUS_IN: bool^n;)
+returns (done, ENTER_M, ENTER_EXP, ENTER_N: bool; BUS_OUT: bool^n;);
+var chCode, chM, chExp, chMod, op1_1, op1_0, op2, load, uc1, uc0: bool;
+var C, Z, P: bool;
+let
+    (done, chCode, chM, chExp, chMod, op1_1, op1_0, op2, load, uc1, uc0, ENTER_M, ENTER_EXP, ENTER_N) = PC<<n>>(start, reset, C, Z, P);
+    (BUS_OUT, C, Z, P) = PO<<n>>(BUS_IN, chCode, chM, chExp, chMod, op1_1, op1_0, op2, load, uc1, uc0);
+
+tel;
